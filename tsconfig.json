@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
+    "strict": true,                                      /* Enable all strict type-checking options. */
+    "declaration": true,
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "tests",
+    "dist",
+    "node_modules"
+  ]
+}
