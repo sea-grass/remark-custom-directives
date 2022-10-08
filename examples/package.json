@@ -1,0 +1,22 @@
+{
+  "name": "examples",
+  "private": "true",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rehype-stringify": "^9.0.3",
+    "remark-custom-directives": "^1.0.0",
+    "remark-directive": "^2.0.1",
+    "remark-parse": "^10.0.1",
+    "remark-rehype": "^10.1.0",
+    "unified": "^10.1.2"
+  }
+}
