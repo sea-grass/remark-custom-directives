@@ -7,15 +7,20 @@ import type {
 	LeafDirective
 } from 'mdast-util-directive';
 
+type DirectiveNode = TextDirective|ContainerDirective|LeafDirective;
+type FnWithRoot<D extends DirectiveNode> = (node: D, tree: Root) => Promise<void>;
+type FnWithoutRoot<D extends DirectiveNode> = (node: D) => Promise<void>;
+type DirectiveFn<D extends DirectiveNode> = FnWithRoot<D> | FnWithoutRoot<D>;
+
 export interface Directives {
 	textDirective?: {
-		[name: string]: (node: TextDirective) => Promise<void>;
+		[name: string]: DirectiveFn<TextDirective>;
 	};
 	containerDirective?: {
-		[name: string]: (node: ContainerDirective) => Promise<void>;
+		[name: string]: DirectiveFn<ContainerDirective>;
 	};
 	leafDirective?: {
-		[name: string]: (node: LeafDirective) => Promise<void>;
+		[name: string]: DirectiveFn<LeafDirective>;
 	};
 }
 
@@ -37,7 +42,7 @@ const remarkCustomDirectives: Plugin<[Directives], Root> = (
 			if (node.type === 'textDirective') {
 				const directive = directives.textDirective?.[node.name];
 				if (directive) {
-					promises.push(directive(node));
+					promises.push(directive(node, tree));
 				} else {
 					// unknown text directive, so let's change it to a text node
 					const text = ':' + node.name;
@@ -45,11 +50,10 @@ const remarkCustomDirectives: Plugin<[Directives], Root> = (
 					textNode.type = 'text';
 					textNode.value = text;
 				}
-				promises.push(directives.textDirective?.[node.name]?.(node));
 			} else if (node.type === 'leafDirective') {
-				promises.push(directives.leafDirective?.[node.name]?.(node));
+				promises.push(directives.leafDirective?.[node.name]?.(node, tree));
 			} else if (node.type === 'containerDirective') {
-				promises.push(directives.containerDirective?.[node.name]?.(node));
+				promises.push(directives.containerDirective?.[node.name]?.(node, tree));
 			}
 		});
 
